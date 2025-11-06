@@ -27,7 +27,9 @@ module AI
 
     def parse_response(response)
       body = response.dig(:content, 0, :text)
-      JSON.parse(body, symbolize_names: true)
+      # Remove markdown code block formatting if present
+      clean_body = body.gsub(/^```json\n/, '').gsub(/\n```$/, '')
+      JSON.parse(clean_body, symbolize_names: true)
     rescue JSON::ParserError => e
       raise "Failed to parse customer AI response: #{e.message}\n#{body}"
     end

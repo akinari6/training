@@ -43,5 +43,6 @@ group :ai do
   gem "anthropic", "~> 1.13"
   gem "octokit"
   gem "httparty"
+  gem "faraday-retry"
 end
 
