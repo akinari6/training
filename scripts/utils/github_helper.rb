@@ -33,7 +33,7 @@ module Utils
 
     def create_pr_comment(pull_request_number:, body:)
       ensure_repository!
-      @client.create_issue_comment(@repository, pull_request_number, body)
+      @client.add_comment(@repository, pull_request_number, body)
     end
 
     private
