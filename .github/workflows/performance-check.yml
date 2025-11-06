@@ -1,0 +1,34 @@
+name: Performance Check
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  performance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - name: Install dependencies
+        run: bundle install --with ai
+      - name: Run performance measurement
+        run: bundle exec ruby -r ./scripts/performance/measure -e "Performance::Measure.new.run"
+      - name: Evaluate performance
+        run: |
+          ruby <<'RUBY'
+          require_relative './scripts/performance/measure'
+          require_relative './scripts/performance/evaluate'
+          require_relative './scripts/performance/report'
+          metrics = JSON.parse(File.read('state/performance_metrics.json'), symbolize_names: true)
+          report = Performance::Report.new.generate(metrics)
+          File.write('performance_report.md', report)
+          RUBY
+      - name: Upload report comment
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-report
+          path: performance_report.md

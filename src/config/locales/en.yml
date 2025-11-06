@@ -1,0 +1,16 @@
+en:
+  hello: "Hello world"
+  activerecord:
+    models:
+      user: User
+      task: Task
+    attributes:
+      user:
+        email: Email
+        password: Password
+      task:
+        title: Title
+        description: Description
+        due_at: Due date
+        priority: Priority
+        completed: Completed

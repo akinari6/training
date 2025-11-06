@@ -1,0 +1,46 @@
+name: Design Review
+
+on:
+  issues:
+    types: [labeled]
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  design-review-issue:
+    if: github.event_name == 'issues' && github.event.label.name == 'design-review-requested'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - name: Install dependencies
+        run: bundle install --with ai
+      - name: Run design review (issue)
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: bundle exec ruby -r ./scripts/ai/design_reviewer_ai -e "AI::DesignReviewerAI.new.review_issue(issue_number: ENV.fetch('ISSUE_NUMBER').to_i)"
+
+  design-review-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - name: Install dependencies
+        run: bundle install --with ai
+      - name: Run design review (PR)
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: bundle exec ruby -r ./scripts/ai/design_reviewer_ai -e "AI::DesignReviewerAI.new.review(pull_request_number: ENV.fetch('PR_NUMBER').to_i)"
