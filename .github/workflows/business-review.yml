@@ -1,12 +1,15 @@
 name: Business Review
 
 on:
-  issues:
-    types: [opened, edited]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Issue number to review from a business/domain perspective'
+        required: true
+        type: number
 
 jobs:
   review:
-    if: contains(github.event.issue.labels.*.name, 'customer-request')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,7 +21,7 @@ jobs:
         run: bundle install --with ai
       - name: Run business review
         env:
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_NUMBER: ${{ github.event.inputs.issue_number }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

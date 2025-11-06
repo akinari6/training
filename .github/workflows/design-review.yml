@@ -1,14 +1,23 @@
 name: Design Review
 
 on:
-  issues:
-    types: [labeled]
-  pull_request:
-    types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      target_type:
+        description: 'Review an issue or pull request'
+        required: true
+        type: choice
+        options:
+          - issue
+          - pull_request
+      target_number:
+        description: 'Issue or pull request number to review'
+        required: true
+        type: number
 
 jobs:
   design-review-issue:
-    if: github.event_name == 'issues' && github.event.label.name == 'design-review-requested'
+    if: ${{ github.event.inputs.target_type == 'issue' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +29,7 @@ jobs:
         run: bundle install --with ai
       - name: Run design review (issue)
         env:
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_NUMBER: ${{ github.event.inputs.target_number }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -28,7 +37,7 @@ jobs:
           bundle exec ruby -r ./scripts/ai/design_reviewer_ai -e "AI::DesignReviewerAI.new.review_issue(issue_number: ENV.fetch('ISSUE_NUMBER').to_i)"
 
   design-review-pr:
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event.inputs.target_type == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +49,7 @@ jobs:
         run: bundle install --with ai
       - name: Run design review (PR)
         env:
-          PR_NUMBER: ${{ github.event.number }}
+          PR_NUMBER: ${{ github.event.inputs.target_number }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

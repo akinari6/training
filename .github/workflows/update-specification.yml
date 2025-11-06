@@ -1,17 +1,18 @@
 name: Update Specification
 
 on:
-  pull_request:
-    types: [closed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Merged pull request number to summarise in the specification'
+        required: true
+        type: number
 
 jobs:
   update-spec:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.merge_commit_sha }}
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
@@ -20,7 +21,7 @@ jobs:
         run: bundle install --with ai
       - name: Update specification
         env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER: ${{ github.event.inputs.pr_number }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
