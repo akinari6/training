@@ -13,7 +13,9 @@ module Utils
 
     def create_issue(payload)
       ensure_repository!
-      @client.create_issue(@repository, payload[:title], payload[:body], labels: payload_labels(payload))
+      with_safe_api("issue creation") do
+        @client.create_issue(@repository, payload[:title], payload[:body], labels: payload_labels(payload))
+      end
     end
 
     def fetch_issue(number)
@@ -23,7 +25,9 @@ module Utils
 
     def create_issue_comment(issue_number:, body:)
       ensure_repository!
-      @client.add_comment(@repository, issue_number, body)
+      with_safe_api("issue comment") do
+        @client.add_comment(@repository, issue_number, body)
+      end
     end
 
     def fetch_pull_request(number)
@@ -33,7 +37,9 @@ module Utils
 
     def create_pr_comment(pull_request_number:, body:)
       ensure_repository!
-      @client.add_comment(@repository, pull_request_number, body)
+      with_safe_api("pull request comment") do
+        @client.add_comment(@repository, pull_request_number, body)
+      end
     end
 
     private
@@ -51,6 +57,16 @@ module Utils
 
     def ensure_repository!
       raise "GITHUB_REPOSITORY must be set" if @repository.to_s.empty?
+    end
+
+    def with_safe_api(action_description)
+      yield
+    rescue Octokit::Forbidden => e
+      warn "[GithubHelper] Skipping #{action_description}: #{e.message}"
+      nil
+    rescue Octokit::Unauthorized => e
+      warn "[GithubHelper] GitHub credentials unauthorized for #{action_description}: #{e.message}"
+      nil
     end
   end
 end
