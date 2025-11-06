@@ -20,6 +20,7 @@ jobs:
       - name: Evaluate performance
         run: |
           ruby <<'RUBY'
+          require 'json'
           require_relative './scripts/performance/measure'
           require_relative './scripts/performance/evaluate'
           require_relative './scripts/performance/report'
