@@ -23,7 +23,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: '3.2.8'
           bundler-cache: true
       - name: Install dependencies
         run: bundle install --with ai
@@ -43,7 +43,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.2'
+          ruby-version: '3.2.8'
           bundler-cache: true
       - name: Install dependencies
         run: bundle install --with ai
