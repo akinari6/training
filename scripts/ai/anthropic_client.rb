@@ -18,7 +18,7 @@ module AI
     end
 
     def create_message(system:, context:, max_tokens: 1024, temperature: 0.7, model: "claude-sonnet-4-5-20250929")
-      raise "ANTHROPIC_API_KEY is not configured" unless available?
+      return offline_response if !available?
 
       request_body = {
         model: model,
@@ -48,6 +48,19 @@ module AI
       raise "Anthropic API request failed: #{response.code} #{response.body}" unless response.is_a?(Net::HTTPSuccess)
 
       JSON.parse(response.body, symbolize_names: true)
+    end
+
+    private
+
+    def offline_response
+      warn "[AnthropicClient] ANTHROPIC_API_KEY missing; returning placeholder response"
+      {
+        content: [
+          {
+            text: "(AI response unavailable: configure ANTHROPIC_API_KEY to enable automated feedback.)"
+          }
+        ]
+      }
     end
   end
 end
