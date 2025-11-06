@@ -9,23 +9,32 @@
   <%= javascript_importmap_tags %>
 </head>
 <body>
-  <header>
-    <nav>
-      <% if logged_in? %>
-        <span><%= current_user.email %></span>
-        <%= link_to "タスク一覧", tasks_path %> |
-        <%= link_to "ログアウト", session_path, method: :delete %>
-      <% else %>
-        <%= link_to "ログイン", new_session_path %> |
-        <%= link_to "新規登録", new_user_path %>
-      <% end %>
-    </nav>
+  <header class="top-bar">
+    <div class="nav-content">
+      <div class="brand">TaskSim</div>
+      <nav>
+        <% if logged_in? %>
+          <span class="muted-text"><%= current_user.email %></span>
+          <%= link_to "タスク一覧", tasks_path %>
+          <%= link_to "ログアウト", session_path, method: :delete %>
+        <% else %>
+          <%= link_to "ログイン", new_session_path %>
+          <%= link_to "新規登録", new_user_path %>
+        <% end %>
+      </nav>
+    </div>
   </header>
 
-  <% flash.each do |type, message| %>
-    <div class="<%= flash_class(type) %>"><%= message %></div>
+  <% if flash.any? %>
+    <div class="flash-wrapper">
+      <% flash.each do |type, message| %>
+        <div class="<%= flash_class(type) %>"><%= message %></div>
+      <% end %>
+    </div>
   <% end %>
 
-  <%= yield %>
+  <main class="container">
+    <%= yield %>
+  </main>
 </body>
 </html>

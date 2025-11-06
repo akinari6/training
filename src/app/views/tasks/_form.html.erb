@@ -1,25 +1,30 @@
 <%= form_with model: @task do |form| %>
-  <div>
-    <%= form.label :title %>
-    <%= form.text_field :title %>
+  <div class="field">
+    <%= form.label :title, "タイトル" %>
+    <%= form.text_field :title, placeholder: "例）週次ミーティングのアジェンダ作成" %>
   </div>
-  <div>
-    <%= form.label :description %>
-    <%= form.text_area :description %>
+
+  <div class="field">
+    <%= form.label :description, "説明" %>
+    <%= form.text_area :description, rows: 4, placeholder: "タスクの目的や背景を記載してください" %>
   </div>
-  <div>
-    <%= form.label :due_at %>
+
+  <div class="field">
+    <%= form.label :due_at, "期限" %>
     <%= form.datetime_select :due_at, include_blank: true %>
   </div>
-  <div>
-    <%= form.label :priority %>
+
+  <div class="field">
+    <%= form.label :priority, "優先度" %>
     <%= form.select :priority, Task.priorities.keys.map { |p| [p, p] } %>
   </div>
-  <div>
-    <%= form.label :completed %>
+
+  <div class="field">
+    <%= form.label :completed, "完了済み" %>
     <%= form.check_box :completed %>
   </div>
-  <div>
-    <%= form.submit %>
+
+  <div class="form-actions">
+    <%= form.submit "保存する", class: "btn btn-primary" %>
   </div>
 <% end %>

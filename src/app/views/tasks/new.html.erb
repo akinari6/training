@@ -1,3 +1,10 @@
-<h1>タスク作成</h1>
-<%= render "form" %>
-<%= link_to "戻る", tasks_path %>
+<div class="card">
+  <h1>タスク作成</h1>
+  <p class="muted-text">タスクを登録して、チームの作業を整理しましょう。</p>
+
+  <%= render "form" %>
+
+  <div class="actions">
+    <%= link_to "一覧に戻る", tasks_path, class: "btn btn-secondary" %>
+  </div>
+</div>

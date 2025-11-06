@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "json"
-require_relative "anthropic_client"
-require_relative "../utils/state_manager"
-require_relative "../utils/github_helper"
-require_relative "../utils/prompt_templates"
+require 'json'
+require_relative 'anthropic_client'
+require_relative '../utils/state_manager'
+require_relative '../utils/github_helper'
+require_relative '../utils/prompt_templates'
 
 module AI
   # Customer agent generates issues that simulate real user requests.
