@@ -1,0 +1,29 @@
+name: Code Review
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull request number to review'
+        required: true
+        type: number
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - name: Install dependencies
+        run: bundle install --with ai
+      - name: Run code review
+        env:
+          PR_NUMBER: ${{ github.event.inputs.pr_number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          bundle exec ruby -r ./scripts/ai/code_reviewer_ai -e "AI::CodeReviewerAI.new.review(pull_request_number: ENV.fetch('PR_NUMBER').to_i)"
