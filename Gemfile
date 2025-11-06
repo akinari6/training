@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.2.3"
+ruby "3.2.9"
 
 gem "rails", "~> 7.1.3"
 gem "pg", "~> 1.5", group: :production
