@@ -40,7 +40,7 @@ group :test do
 end
 
 group :ai do
-  gem "anthropic", "~> 0.5.0"
+  gem "anthropic", "~> 1.13"
   gem "octokit"
   gem "httparty"
 end
