@@ -1,0 +1,13 @@
+/log/
+/tmp/
+/storage/
+/vendor/bundle/
+/node_modules/
+/.bundle/
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/.env
+/.env.*
+/coverage/
+/spec/examples.txt
+/.DS_Store

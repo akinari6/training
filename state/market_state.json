@@ -1,0 +1,25 @@
+{
+  "phase": 1,
+  "user_count": 100,
+  "merged_prs_count": 0,
+  "last_updated": "2025-01-01T00:00:00Z",
+  "performance_requirements": {
+    "max_response_time_ms": 500,
+    "max_db_queries_per_request": 20,
+    "required_test_coverage_percent": 60,
+    "max_memory_mb": 512
+  },
+  "business_metrics": {
+    "active_users_daily": 50,
+    "churn_rate": 0.05,
+    "nps_score": 7.5
+  },
+  "market_conditions": {
+    "competition_level": "low",
+    "user_demand": "growing",
+    "tech_trends": [
+      "real-time collaboration",
+      "mobile-first"
+    ]
+  }
+}

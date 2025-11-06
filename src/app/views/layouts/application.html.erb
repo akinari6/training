@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>TaskSim</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="nav-content">
+      <div class="brand">TaskSim</div>
+      <nav>
+        <% if logged_in? %>
+          <span class="muted-text"><%= current_user.email %></span>
+          <%= link_to "タスク一覧", tasks_path %>
+          <%= link_to "ログアウト", session_path, method: :delete %>
+        <% else %>
+          <%= link_to "ログイン", new_session_path %>
+          <%= link_to "新規登録", new_user_path %>
+        <% end %>
+      </nav>
+    </div>
+  </header>
+
+  <% if flash.any? %>
+    <div class="flash-wrapper">
+      <% flash.each do |type, message| %>
+        <div class="<%= flash_class(type) %>"><%= message %></div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <main class="container">
+    <%= yield %>
+  </main>
+</body>
+</html>

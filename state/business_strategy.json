@@ -1,0 +1,15 @@
+{
+  "vision": "タスク管理を通じてチームの生産性を最大化する",
+  "market_position": "growing-mid-market",
+  "target_users": ["SaaSスタートアップ", "リモートチーム"],
+  "strategic_pillars": {
+    "collaboration": "リアルタイム共同編集体験の強化",
+    "automation": "ワークフロー自動化とAIアシスト",
+    "insights": "データドリブンな意思決定支援"
+  },
+  "guardrails": [
+    "ユーザーデータの安全な取り扱い",
+    "フェーズに応じたスコープ管理",
+    "運用コストを月額$50以内に抑える"
+  ]
+}
