@@ -25,13 +25,15 @@
           <td><%= task.priority %></td>
           <td><%= task.completed? ? '完了' : '未完了' %></td>
           <td>
-            <% if task.completed? %>
-              <%= link_to '再開', reopen_task_path(task), method: :patch, class: 'btn btn-secondary' %>
-            <% else %>
-              <%= link_to '完了', complete_task_path(task), method: :patch, class: 'btn btn-secondary' %>
-            <% end %>
-            <%= link_to '編集', edit_task_path(task), class: 'btn btn-secondary' %>
-            <%= link_to '削除', task, method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-secondary' %>
+            <div class="task-actions">
+              <% if task.completed? %>
+                <%= button_to '再開', reopen_task_path(task), method: :patch, class: 'btn btn-secondary' %>
+              <% else %>
+                <%= button_to '完了', complete_task_path(task), method: :patch, class: 'btn btn-secondary' %>
+              <% end %>
+              <%= link_to '編集', edit_task_path(task), class: 'btn btn-secondary' %>
+              <%= button_to '削除', task, method: :delete, class: 'btn btn-secondary', form: { data: { turbo_confirm: '本当に削除しますか？' } } %>
+            </div>
           </td>
         </tr>
       <% end %>
