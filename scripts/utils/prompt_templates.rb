@@ -8,6 +8,20 @@ module Utils
     module_function
 
     def customer_prompt(state:)
+      phase = state[:phase].to_i
+      phase_guidance = if phase <= 2
+        <<~GUIDANCE
+          プロダクトは初期フェーズです。まずは顧客が本当に欲しがるコア機能を充実させる段階なので、新機能追加に限定した要望のみを検討してください。
+          - typeは必ず"feature"を指定すること。
+          - バグ報告、既存機能の微調整、パフォーマンス改善の話題はこのフェーズでは扱わないこと。
+          - 既存の体験に触れる場合も、新しい機能を追加して価値を高める文脈で説明すること。
+        GUIDANCE
+      else
+        <<~GUIDANCE
+          プロダクトは成長フェーズに入っています。現在のフェーズで最も価値の高いテーマを1件だけ選び、必要に応じて機能追加・改善・バグ修正・パフォーマンス改善のいずれかを要望してください。ただし話題を広げすぎず、Rails製Webアプリとして現実的に優先すべき事項に絞り込んでください。
+        GUIDANCE
+      end
+
       {
         system: <<~PROMPT,
           役割: タスク管理アプリを利用するWebアプリケーションユーザー
@@ -18,8 +32,8 @@ module Utils
         PROMPT
         context: <<~CONTEXT
           市場状態: #{state[:market_conditions].to_json}
-          これまでのIssueを踏まえてリアルな顧客要望をJSON形式で1件生成してください。
-          バックエンドやWeb UIの基本機能に焦点を当て、フロントエンドはシンプルな体験を維持しつつ改善案を検討してください。
+          #{phase_guidance.strip}
+          これまでのIssueを踏まえてリアルな顧客要望をJSON形式で1件生成してください。Railsバックエンドの基本機能とシンプルなWeb UIの体験向上に焦点を合わせ、実装可能な粒度で要望をまとめてください。
           出力形式:
           {
             "title": "簡潔なタイトル",
